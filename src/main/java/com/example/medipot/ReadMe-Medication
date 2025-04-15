@@ -1,0 +1,73 @@
+
+# MediPot - Medication Klasse
+
+## Überblick
+
+Die `Medication`-Klasse repräsentiert ein Medikament innerhalb der MediPot-Anwendung. Sie enthält alle relevanten Informationen über ein Medikament, wie zum Beispiel den Namen, Hersteller, Preis, Lagerbestand, Kategorie und ob das Medikament rezeptpflichtig ist. Diese Klasse dient der Verwaltung und Darstellung von Medikamenten, die in Apotheken verfügbar sind.
+
+## Funktionen der `Medication` Klasse
+
+1. **ID des Medikaments**:
+   - Jedes Medikament hat eine eindeutige ID, die es eindeutig identifiziert.
+
+2. **Name des Medikaments**:
+   - Der Name des Medikaments wird als String gespeichert.
+
+3. **Hersteller des Medikaments**:
+   - Der Hersteller des Medikaments wird als String gespeichert.
+
+4. **Preis des Medikaments**:
+   - Der Preis des Medikaments wird als `double` gespeichert.
+
+5. **Lagerbestand des Medikaments**:
+   - Der Lagerbestand des Medikaments gibt an, wie viele Einheiten des Medikaments in der Apotheke verfügbar sind.
+
+6. **Kategorie des Medikaments**:
+   - Die Kategorie beschreibt die Art des Medikaments, wie z. B. "Schmerzmittel", "Antibiotika" usw.
+
+7. **Rezeptpflicht des Medikaments**:
+   - Ein boolean-Wert, der angibt, ob das Medikament rezeptpflichtig ist.
+
+## Methoden
+
+### Konstruktor
+
+- **`Medication(int id, String name, String manufacturer, double price, int stock, String category, boolean prescriptionRequired)`**:
+  - Initialisiert eine neue Instanz der `Medication`-Klasse.
+  - Parameter:
+    - `id`: Die eindeutige ID des Medikaments.
+    - `name`: Der Name des Medikaments.
+    - `manufacturer`: Der Hersteller des Medikaments.
+    - `price`: Der Preis des Medikaments.
+    - `stock`: Der Lagerbestand des Medikaments.
+    - `category`: Die Kategorie des Medikaments (z. B. Schmerzmittel, Antibiotika).
+    - `prescriptionRequired`: Ein boolean-Wert, der angibt, ob das Medikament rezeptpflichtig ist.
+
+### Getter
+
+- **`getId()`**: Gibt die ID des Medikaments zurück.
+- **`getName()`**: Gibt den Namen des Medikaments zurück.
+- **`getManufacturer()`**: Gibt den Hersteller des Medikaments zurück.
+- **`getPrice()`**: Gibt den Preis des Medikaments zurück.
+- **`getStock()`**: Gibt den Lagerbestand des Medikaments zurück.
+- **`getCategory()`**: Gibt die Kategorie des Medikaments zurück.
+- **`isPrescriptionRequired()`**: Gibt zurück, ob das Medikament rezeptpflichtig ist.
+
+### Sonstige Methoden
+
+- **`toString()`**:
+  - Gibt eine lesbare Darstellung des Medikaments zurück, die den Namen, die Kategorie, den Hersteller und den Preis umfasst.
+
+## Beispiel
+
+```java
+// Erstellen eines neuen Medikaments
+Medication aspirin = new Medication(1, "Aspirin", "Bayer", 5.99, 100, "Schmerzmittel", true);
+
+// Zugriff auf die Attribute des Medikaments
+System.out.println("Medikament: " + aspirin.getName());
+System.out.println("Preis: €" + aspirin.getPrice());
+System.out.println("Lagerbestand: " + aspirin.getStock());
+
+// Ausgabe der lesbaren Darstellung des Medikaments
+System.out.println(aspirin.toString());

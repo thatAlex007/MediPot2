@@ -1,0 +1,16 @@
+/**
+ * Das Interface QueryMapper<T> stellt eine funktionale Schnittstelle dar,
+ * die verwendet wird, um Zeilen eines SQL-ResultSets in Java-Objekte vom Typ T zu überführen.
+ *
+ * Es enthält eine einzige abstrakte Methode map(), die ein ResultSet entgegennimmt
+ * und daraus ein Objekt vom Typ T erstellt.
+ *
+ * Die Methode kann eine SQLException werfen, da beim Zugriff auf das ResultSet
+ * Datenbankfehler auftreten können.
+ *
+ * Dieses Interface ermöglicht den Einsatz von Lambda-Ausdrücken oder Methodenreferenzen
+ * beim Arbeiten mit Datenbankabfragen, z. B. in einem Data Access Layer (DAO).
+ *
+ * Beispielhafte Verwendung:
+ * - Implementierung einer Lambda-Funktion, die ein ResultSet in ein Domain-Objekt wie Medication oder Pharmacy umwandelt.
+ */

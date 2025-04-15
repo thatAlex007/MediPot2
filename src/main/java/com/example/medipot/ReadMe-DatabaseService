@@ -1,0 +1,29 @@
+/**
+ * Die Klasse DatabaseService kapselt den Zugriff auf die SQLite-Datenbank
+ * und bietet Methoden zur Ausführung von SQL-Abfragen sowie zur Abbildung
+ * der Ergebnisse auf Java-Objekte.
+ *
+ * Die Verbindung zur Datenbank wird über den JDBC-Treiber für SQLite hergestellt.
+ * Der Pfad zur Datenbankdatei ist fest im Konstruktor definiert.
+ *
+ * Zentrale Funktionalitäten:
+ *
+ * - connect(): Stellt eine Verbindung zur Datenbank her.
+ * - executeQuery(): Führt eine parametrisierte SQL-Abfrage aus, verwendet dabei
+ *   einen QueryMapper, um die Zeilen des ResultSets in Java-Objekte vom Typ T umzuwandeln.
+ * - getAllMedications(): Liefert alle Medikamente aus der Datenbank als Liste von Medication-Objekten.
+ * - getAllPharmacies(): Liefert alle Apotheken inklusive deren Inventar
+ *   (über eine zusätzliche Abfrage pro Apotheke).
+ * - isMedicationAvailableInPharmacy(): Prüft, ob ein bestimmtes Medikament in einer bestimmten Apotheke verfügbar ist.
+ * - getInventoryByPharmacy(): Liefert das Inventar (Medikamentenliste) einer bestimmten Apotheke.
+ * - testConnection(): Testet, ob eine Verbindung zur Datenbank erfolgreich aufgebaut werden kann.
+ *
+ * Die Klasse verwendet das funktionale Interface QueryMapper<T> in Kombination
+ * mit Lambda-Ausdrücken, um eine generische und wiederverwendbare Abfragelogik zu ermöglichen.
+ *
+ * Durch den Einsatz von Logging (java.util.logging.Logger) werden Fehler
+ * sowie wichtige Informationen wie Verbindungsstatus und Abfrageergebnisse ausgegeben.
+ *
+ * Diese Klasse bildet die Grundlage für den Datenzugriff in einer Anwendung,
+ * die mit Medikamenten und Apotheken arbeitet.
+ */

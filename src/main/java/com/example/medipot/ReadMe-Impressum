@@ -1,0 +1,14 @@
+/**
+ * Die Klasse Impressum stellt eine statische Methode zur Verfügung,
+ * die ein Impressum als String zurückliefert.
+ *
+ * Diese Methode dient dazu, Informationen über das Projekt und das dahinterstehende Team
+ * bereitzustellen. Sie ist insbesondere für schulische oder demonstrative Softwareprojekte gedacht,
+ * bei denen ein Impressum als Bestandteil der Anwendung angezeigt werden soll.
+ *
+ * Das Impressum enthält:
+ * - Einen Vermerk über den schulischen Hintergrund des Projekts
+ * - Die Namen aller beteiligten Teammitglieder inklusive Projektleitung
+ *
+ * Die Rückgabe erfolgt als mehrzeiliger String im Textblock-Format.
+ */

@@ -1,0 +1,34 @@
+/**
+ * Diese Klasse ist die Hauptoberfläche der JavaFX-Anwendung MediPot.
+ * Sie dient der Suche nach Medikamenten in verschiedenen Apotheken.
+ *
+ * Beim Start der Anwendung wird ein grafisches Benutzerinterface aufgebaut,
+ * das aus einem Kopfbereich mit Logo, Titel und einem Impressum-Button,
+ * sowie einem zentralen Bereich mit einer Suchleiste und Ergebnisanzeige besteht.
+ *
+ * Die Medikamentensuche erfolgt über ein editierbares ComboBox-Suchfeld,
+ * das automatisch Vorschläge anzeigt, basierend auf den Einträgen in der Datenbank.
+ * Bei der Eingabe wird die Liste der verfügbaren Medikamentennamen dynamisch gefiltert.
+ *
+ * Sobald ein Medikament ausgewählt oder die Enter-Taste gedrückt wird,
+ * wird eine Suche in allen Apotheken durchgeführt, um herauszufinden,
+ * ob das Medikament verfügbar ist und ob es rezeptpflichtig ist.
+ *
+ * Die Ergebnisse werden in einer ListView angezeigt, inklusive Verfügbarkeit
+ * pro Apotheke sowie einer Warnung, falls das Medikament rezeptpflichtig ist.
+ * Wird das Medikament nicht gefunden, wird eine entsprechende Meldung angezeigt.
+ *
+ * Der Impressum-Button öffnet ein separates Fenster mit rechtlichen Informationen.
+ *
+ * Zusätzlich wird sichergestellt, dass alle Änderungen an der Benutzeroberfläche
+ * im JavaFX-Thread durchgeführt werden, um Thread-Sicherheit zu gewährleisten.
+ *
+ * Die Anwendung verwendet folgende eigene Klassen:
+ * - DatabaseService: zur Abfrage der Medikamenten- und Apothekendaten
+ * - Medication: Modellklasse für Medikamente
+ * - Pharmacy: Modellklasse für Apotheken
+ * - Impressum: liefert den Text für das Impressumsfenster
+ *
+ * Einstiegspunkt der Anwendung ist die main()-Methode,
+ * welche den JavaFX-Startprozess einleitet.
+ */

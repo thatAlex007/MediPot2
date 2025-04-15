@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediPot Download</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+    <div>
+        <img src="/Logo_Medipot_Power.png" alt="MediPot Logo">
+        <h1>MediPot</h1>
+    </div>
+    <button class="impressum-btn" onclick="toggleImpressum()">Impressum</button>
+</header>
+<div class="content">
+    <h2>Java Anwendung herunterladen</h2>
+    <p>Klicken Sie auf den Button, um die MediPot-Anwendung herunterzuladen:</p>
+    <a href="/MediPot.jar" class="download-btn" download>Download MediPot</a>
+</div>
+<div class="overlay" id="overlay" onclick="toggleImpressum()"></div>
+<div class="impressum-popup" id="impressumPopup">
+    <h3>Impressum</h3>
+    <p>Erstellt im Namen eines Schulprojekts</p>
+    <p><strong>Teammitglieder:</strong></p>
+    <ul>
+        <li>Enes Yigit (Projektleiter)</li>
+        <li>Alexander Apostol</li>
+        <li>Nikolina Krstic</li>
+        <li>Esra Sokullu</li>
+    </ul>
+    <button onclick="toggleImpressum()">Schließen</button>
+</div>
+<script>
+    function toggleImpressum() {
+        const popup = document.getElementById('impressumPopup');
+        const overlay = document.getElementById('overlay');
+        const isVisible = popup.style.display === 'block';
+        popup.style.display = isVisible ? 'none' : 'block';
+        overlay.style.display = isVisible ? 'none' : 'block';
+    }
+
+    // Impressum dynamisch laden
+    fetch('/api/impressum')
+        .then(response => response.json())
+        .then(data => {
+            const impressumPopup = document.getElementById('impressumPopup');
+            impressumPopup.innerHTML = `
+                <h3>Impressum</h3>
+                <p>${data.impressum.replace(/\\n/g, '<br>')}</p>
+                <button onclick="toggleImpressum()">Schließen</button>
+            `;
+        });
+</script>
+</body>
+</html>

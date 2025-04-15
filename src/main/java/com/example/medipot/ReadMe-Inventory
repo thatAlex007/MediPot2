@@ -1,0 +1,123 @@
+/**
+ * Die Klasse Inventory repräsentiert den Lagerbestand einer Apotheke und verwaltet 
+ * die verfügbaren Mengen von Medikamenten in der Apotheke.
+ * 
+ * Diese Klasse stellt Methoden zur Verfügung, um Medikamente hinzuzufügen, zu entfernen, 
+ * und den aktuellen Bestand eines bestimmten Medikaments abzufragen.
+ * 
+ * <p>Ein {@link Pharmacy}-Objekt ist mit jedem {@link Inventory} verknüpft, um den 
+ * Lagerbestand einer bestimmten Apotheke zu verfolgen. Der Lagerbestand wird als 
+ * {@link Map} von {@link Medication} und der entsprechenden Menge des Medikaments gespeichert.</p>
+ * 
+ * @author [Dein Name]
+ */
+public class Inventory {
+
+    private Pharmacy pharmacy; // Referenz zur Apotheke
+    private Map<Medication, Integer> stock; // Lagerbestand: Medikament -> Menge
+
+    /**
+     * Konstruktor, der ein neues {@link Inventory} für die angegebene Apotheke erstellt.
+     * 
+     * @param pharmacy Die Apotheke, für die der Lagerbestand verwaltet wird.
+     */
+    public Inventory(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
+        this.stock = new HashMap<>(); // Initialisiert die Map für den Lagerbestand
+    }
+
+    /**
+     * Gibt die Apotheke zurück, zu der dieser Lagerbestand gehört.
+     * 
+     * @return Die zugehörige Apotheke.
+     */
+    public Pharmacy getPharmacy() {
+        return pharmacy;
+    }
+
+    /**
+     * Setzt die Apotheke, zu der dieser Lagerbestand gehört.
+     * 
+     * @param pharmacy Die zu setzende Apotheke.
+     */
+    public void setPharmacy(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
+    }
+
+    /**
+     * Gibt den Lagerbestand der Apotheke zurück, wobei jedes Medikament mit seiner 
+     * Menge in einer {@link Map} gespeichert ist.
+     * 
+     * @return Die {@link Map} des Lagerbestands.
+     */
+    public Map<Medication, Integer> getStock() {
+        return stock;
+    }
+
+    /**
+     * Setzt den gesamten Lagerbestand auf eine neue {@link Map}.
+     * 
+     * @param stock Die neue {@link Map} des Lagerbestands.
+     */
+    public void setStock(Map<Medication, Integer> stock) {
+        this.stock = stock;
+    }
+
+    /**
+     * Fügt ein Medikament mit der angegebenen Menge zum Lagerbestand hinzu. 
+     * Falls das Medikament bereits im Lagerbestand vorhanden ist, wird die 
+     * Menge entsprechend erhöht.
+     * 
+     * @param medication Das hinzuzufügende Medikament.
+     * @param quantity Die Menge des Medikaments, die hinzugefügt werden soll.
+     */
+    public void addMedication(Medication medication, int quantity) {
+        stock.put(medication, stock.getOrDefault(medication, 0) + quantity);
+    }
+
+    /**
+     * Entfernt eine angegebene Menge eines Medikaments aus dem Lagerbestand. 
+     * Falls nicht genügend Bestand vorhanden ist, wird die Methode {@code false} zurückgeben.
+     * 
+     * @param medication Das zu entfernende Medikament.
+     * @param quantity Die Menge des Medikaments, die entfernt werden soll.
+     * @return {@code true}, wenn das Medikament erfolgreich entfernt wurde, 
+     *         andernfalls {@code false}.
+     */
+    public boolean removeMedication(Medication medication, int quantity) {
+        if (stock.containsKey(medication) && stock.get(medication) >= quantity) {
+            stock.put(medication, stock.get(medication) - quantity);
+            if (stock.get(medication) == 0) {
+                stock.remove(medication);
+            }
+            return true;
+        }
+        return false; // Nicht genügend Bestand
+    }
+
+    /**
+     * Gibt die aktuelle Menge eines bestimmten Medikaments im Lagerbestand zurück.
+     * 
+     * @param medication Das Medikament, dessen Menge abgefragt werden soll.
+     * @return Die Menge des Medikaments im Lagerbestand. Wenn das Medikament nicht 
+     *         vorhanden ist, wird {@code 0} zurückgegeben.
+     */
+    public int getQuantity(Medication medication) {
+        return stock.getOrDefault(medication, 0);
+    }
+
+    /**
+     * Überschreibt die {@code toString}-Methode, um eine lesbare Darstellung des 
+     * Lagerbestands der Apotheke zu liefern.
+     * 
+     * @return Eine String-Darstellung des Lagerbestands, die die Apotheke und den 
+     *         Lagerbestand der Medikamente umfasst.
+     */
+    @Override
+    public String toString() {
+        return "Inventory{" +
+                "pharmacy=" + pharmacy.getName() +
+                ", stock=" + stock +
+                '}';
+    }
+}

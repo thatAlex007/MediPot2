@@ -1,0 +1,7 @@
+Medication: Repräsentiert ein Medikament mit Attributen wie Name, Wirkstoff, Verfügbarkeit, etc.
+Pharmacy: Repräsentiert eine Apotheke mit Informationen wie Name, Adresse, und Bestand.
+Inventory: Verknüpft Apotheken mit ihren Medikamentenbeständen.
+SearchService: Implementiert die Logik zur Suche nach Medikamenten oder Wirkstoffen.
+UpdateService: Ermöglicht Apotheken, ihre Bestände zu aktualisieren.
+UserInterfaceController: Steuert die Interaktion zwischen der Benutzeroberfläche und der Logik.
+DatabaseService: Verwaltet die Speicherung und Abfrage von Daten (z. B. Medikamente und Apotheken).

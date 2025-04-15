@@ -1,0 +1,47 @@
+/**
+ * Die Klasse Searchmodul stellt die Funktionalität für die Suche nach Apotheken bereit, 
+ * die ein bestimmtes Medikament führen.
+ * 
+ * Sie ermöglicht es, eine Liste von Apotheken zu durchsuchen und jene Apotheken zu finden, 
+ * die ein angegebenes Medikament auf Lager haben. Die Suche erfolgt anhand des Medikaments 
+ * und überprüft, ob es in ausreichender Menge vorrätig ist.
+ *
+ * <p>Die Klasse benötigt eine Liste von Apotheken, die bei der Erstellung des Objekts übergeben wird. 
+ * Mit der Methode {@link #searchByMedication(String)} kann nach Apotheken gesucht werden, 
+ * die das angegebene Medikament führen.</p>
+ *
+ * @author [Dein Name]
+ */
+public class Searchmodul {
+
+    private List<Pharmacy> pharmacies; // Liste der Apotheken, die durchsucht werden sollen.
+
+    /**
+     * Konstruktor, der die Liste der Apotheken initialisiert.
+     *
+     * @param pharmacies Eine Liste von Apotheken, die durchsucht werden sollen.
+     */
+    public Searchmodul(List<Pharmacy> pharmacies) {
+        this.pharmacies = pharmacies; // Weist die übergebene Apothekenliste der Instanzvariablen zu.
+    }
+
+    /**
+     * Durchsucht die Apotheken nach dem angegebenen Medikament und gibt die Apotheken zurück,
+     * die das Medikament auf Lager haben.
+     *
+     * @param medicationName Der Name des gesuchten Medikaments.
+     * @return Eine Liste von Apotheken, die das angegebene Medikament auf Lager haben.
+     */
+    public List<Pharmacy> searchByMedication(String medicationName) {
+        List<Pharmacy> result = new ArrayList<>(); // Erstellt eine Liste für die Suchergebnisse.
+        for (Pharmacy pharmacy : pharmacies) { // Iteriert über alle Apotheken.
+            Medication medication = pharmacy.findMedication(medicationName); 
+            // Sucht das Medikament in der aktuellen Apotheke.
+            if (medication != null && medication.getStock() > 0) {
+                // Überprüft, ob das Medikament existiert und auf Lager ist.
+                result.add(pharmacy); // Fügt die Apotheke der Ergebnisliste hinzu.
+            }
+        }
+        return result; // Gibt die Liste der Apotheken zurück, die das Medikament führen.
+    }
+}

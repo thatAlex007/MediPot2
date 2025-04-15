@@ -1,0 +1,64 @@
+# MediPot - Pharmacy Klasse
+
+## Überblick
+
+Die `Pharmacy`-Klasse repräsentiert eine Apotheke in der MediPot-Anwendung, die zur Verwaltung von Medikamenten und deren Beständen dient. Eine Apotheke hat eine eindeutige ID, einen Namen, eine Adresse und ein Inventar von Medikamenten. Diese Klasse ermöglicht es, Apotheken zu verwalten und nach Medikamenten zu suchen, die in einer Apotheke verfügbar sind.
+
+## Funktionen der `Pharmacy` Klasse
+
+1. **ID der Apotheke**:
+   - Jede Apotheke hat eine eindeutige ID, die sie identifiziert.
+   
+2. **Name und Adresse der Apotheke**:
+   - Der Name und die Adresse werden als Attribute gespeichert, die Informationen über die Apotheke liefern.
+
+3. **Inventar der Apotheke**:
+   - Die Apotheke hat ein Inventar, das eine Liste von `Medication`-Objekten enthält. Jedes `Medication`-Objekt stellt ein Medikament dar, das in der Apotheke verfügbar ist.
+   
+4. **Suche nach Medikamenten**:
+   - Mit der Methode `findMedication(String medicationName)` kann nach einem Medikament im Inventar der Apotheke gesucht werden. Die Suche erfolgt anhand des Namens des Medikaments, wobei Groß-/Kleinschreibung und Leerzeichen ignoriert werden.
+
+## Methoden
+
+### Konstruktor
+
+- **`Pharmacy(int id, String name, String address, List<Medication> inventory)`**:
+  - Initialisiert eine neue Instanz der `Pharmacy`-Klasse.
+  - Parameter:
+    - `id`: Die eindeutige ID der Apotheke.
+    - `name`: Der Name der Apotheke.
+    - `address`: Die Adresse der Apotheke.
+    - `inventory`: Eine Liste der Medikamente, die in der Apotheke verfügbar sind.
+
+### Getter und Setter
+
+- **`getId()`**: Gibt die ID der Apotheke zurück.
+- **`getName()`**: Gibt den Namen der Apotheke zurück.
+- **`getAddress()`**: Gibt die Adresse der Apotheke zurück.
+- **`getInventory()`**: Gibt das Inventar der Apotheke zurück (eine Liste von Medikamenten).
+- **`setInventory(List<Medication> inventory)`**: Setzt das Inventar der Apotheke.
+
+### Sonstige Methoden
+
+- **`findMedication(String medicationName)`**:
+  - Sucht nach einem Medikament im Inventar der Apotheke anhand des Namens.
+  - Gibt das `Medication`-Objekt zurück, wenn das Medikament gefunden wird, andernfalls `null`.
+  
+- **`toString()`**:
+  - Gibt eine lesbare Darstellung der Apotheke zurück, bestehend aus dem Namen und der Adresse der Apotheke.
+
+## Beispiel
+
+```java
+// Erstellen einer neuen Apotheke mit einer Liste von Medikamenten
+List<Medication> medications = new ArrayList<>();
+medications.add(new Medication(1, "Aspirin", "Bayer", 5.99, 100, "Schmerzmittel", true));
+Pharmacy pharmacy = new Pharmacy(1, "Apotheke am Park", "Musterstraße 1, 12345 Stadt", medications);
+
+// Suchen nach einem Medikament
+Medication foundMedication = pharmacy.findMedication("Aspirin");
+if (foundMedication != null) {
+    System.out.println("Gefundenes Medikament: " + foundMedication.getName());
+} else {
+    System.out.println("Medikament nicht gefunden.");
+}
