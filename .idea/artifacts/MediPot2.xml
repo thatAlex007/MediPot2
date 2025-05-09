@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="MediPot2">
+    <output-path>$PROJECT_DIR$/out/artifacts/MediPot2</output-path>
+    <root id="root">
+      <element id="archive" name="MediPot.jar">
+        <element id="module-output" name="MediPot" />
+      </element>
+    </root>
+  </artifact>
+</component>
