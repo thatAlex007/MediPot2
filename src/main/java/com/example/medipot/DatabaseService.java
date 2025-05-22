@@ -1,124 +1,134 @@
-package com.example.medipot; // Definiert das Paket, in dem sich die Klasse befindet.
+package com.example.medipot;
 
-import java.sql.*; // Importiert Klassen für den Zugriff auf SQL-Datenbanken.
-import java.util.ArrayList; // Importiert die ArrayList-Klasse.
-import java.util.List; // Importiert die List-Schnittstelle.
-import java.util.logging.Level; // Importiert die Level-Klasse für Logging.
-import java.util.logging.Logger; // Importiert die Logger-Klasse für Protokollierung.
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class DatabaseService { // Definiert die Klasse für den Datenbankzugriff.
-    private static final Logger LOGGER = Logger.getLogger(DatabaseService.class.getName()); // Erstellt einen Logger für die Klasse.
-    private String url; // Speichert die URL der Datenbank.
+public class DatabaseService {
+    private static final Logger LOGGER = Logger.getLogger(DatabaseService.class.getName());
+    private String url;
 
-    public DatabaseService() { // Konstruktor der Klasse.
-        this.url = "jdbc:sqlite:C:/Users/enesy/OneDrive - HTL Spengergasse/Power - General/MediPot/DataBase/medipot.db"; // Setzt die URL der SQLite-Datenbank.
+    public DatabaseService() {
+        try {
+
+            File dbFile = new File(System.getProperty("user.home") + "/.medipot/medipot.db");
+
+            if (!dbFile.exists()) {
+                try (InputStream in = getClass().getResourceAsStream("/medipot.db")) {
+                    if (in == null) throw new FileNotFoundException("Ressource 'medipot.db' nicht gefunden!");
+                    dbFile.getParentFile().mkdirs(); // Zielordner erstellen
+                    Files.copy(in, dbFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    LOGGER.info("medipot.db wurde extrahiert nach: " + dbFile.getAbsolutePath());
+                }
+            }
+
+            this.url = "jdbc:sqlite:" + dbFile.getAbsolutePath();
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Fehler beim Extrahieren der Datenbank", e);
+            throw new RuntimeException(e);
+        }
     }
 
-    private Connection connect() throws SQLException { // Stellt eine Verbindung zur Datenbank her.
-        return DriverManager.getConnection(url); // Gibt eine neue Verbindung basierend auf der URL zurück.
+    private Connection connect() throws SQLException {
+        return DriverManager.getConnection(url);
     }
 
     private <T> List<T> executeQuery(String query, QueryMapper<T> mapper, Object... params) {
-        // Führt eine SQL-Abfrage aus und wandelt die Ergebnisse in Objekte vom Typ T um.
-        List<T> results = new ArrayList<>(); // Erstellt eine Liste für die Ergebnisse.
-        try (Connection connection = connect(); // Stellt die Verbindung her.
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) { // Bereitet die SQL-Abfrage vor.
+        List<T> results = new ArrayList<>();
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-            for (int i = 0; i < params.length; i++) { // Setzt die Parameter in die Abfrage ein.
+            for (int i = 0; i < params.length; i++) {
                 preparedStatement.setObject(i + 1, params[i]);
             }
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) { // Führt die Abfrage aus und erhält ein ResultSet.
-                while (resultSet.next()) { // Iteriert über die Ergebnisse.
-                    results.add(mapper.map(resultSet)); // Wandelt jede Zeile in ein Objekt um und fügt es der Liste hinzu.
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    results.add(mapper.map(resultSet));
                 }
             }
-        } catch (SQLException e) { // Fängt SQL-Fehler ab.
-            LOGGER.log(Level.SEVERE, "Fehler bei der Abfrage: " + query, e); // Protokolliert den Fehler.
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Fehler bei der Abfrage: " + query, e);
         }
-        return results; // Gibt die Liste der Ergebnisse zurück.
+        return results;
     }
 
     public List<Medication> getAllMedications() {
-        // Ruft alle Medikamente aus der Datenbank ab.
-        String query = "SELECT * FROM Medication"; // SQL-Abfrage für alle Medikamente.
-        return executeQuery(query, resultSet -> new Medication( // Führt die Abfrage aus und wandelt die Ergebnisse in Medication-Objekte um.
-                resultSet.getInt("id"), // ID des Medikaments.
-                resultSet.getString("name"), // Name des Medikaments.
-                resultSet.getString("manufacturer"), // Hersteller des Medikaments.
-                resultSet.getDouble("price"), // Preis des Medikaments.
-                resultSet.getInt("stock"), // Lagerbestand des Medikaments.
-                resultSet.getString("category"), // Kategorie des Medikaments.
-                resultSet.getBoolean("prescription_required") // Gibt an, ob ein Rezept erforderlich ist.
+        String query = "SELECT * FROM m_medikamente";
+        return executeQuery(query, resultSet -> new Medication(
+                resultSet.getInt("m_id"),
+                resultSet.getString("m_name"),
+                resultSet.getString("m_hersteller"),
+                resultSet.getDouble("m_preis"),
+                resultSet.getInt("m_vorrat"),
+                resultSet.getString("m_kategorie"),
+                resultSet.getInt("m_rezeptpflichtig") == 1
         ));
     }
 
     public List<Pharmacy> getAllPharmacies() {
-        // Ruft alle Apotheken aus der Datenbank ab.
-        String query = "SELECT * FROM Pharmacy"; // SQL-Abfrage für alle Apotheken.
-        List<Pharmacy> pharmacies = executeQuery(query, resultSet -> new Pharmacy( // Führt die Abfrage aus und wandelt die Ergebnisse in Pharmacy-Objekte um.
-                resultSet.getInt("id"), // ID der Apotheke.
-                resultSet.getString("name"), // Name der Apotheke.
-                resultSet.getString("address"), // Adresse der Apotheke.
-                null // Das Inventar wird später hinzugefügt.
+        String query = "SELECT * FROM a_apotheken";
+        List<Pharmacy> pharmacies = executeQuery(query, resultSet -> new Pharmacy(
+                resultSet.getInt("a_id"),
+                resultSet.getString("a_name"),
+                resultSet.getString("a_standort"),
+                null // Inventar wird danach geladen
         ));
 
-        for (Pharmacy pharmacy : pharmacies) { // Iteriert über alle Apotheken.
-            List<Medication> inventory = getInventoryByPharmacy(pharmacy.getId()); // Ruft das Inventar der Apotheke ab.
-            pharmacy.setInventory(inventory); // Setzt das Inventar der Apotheke.
+        for (Pharmacy pharmacy : pharmacies) {
+            List<Medication> inventory = getInventoryByPharmacy(pharmacy.getId());
+            pharmacy.setInventory(inventory);
         }
 
-        return pharmacies; // Gibt die Liste der Apotheken zurück.
-    }
-
-    public boolean isMedicationAvailableInPharmacy(int pharmacyId, String medicationName) {
-        // Überprüft, ob ein Medikament in einer bestimmten Apotheke verfügbar ist.
-        String query = """
-            SELECT i.quantity
-            FROM Inventory i
-            JOIN Medication m ON i.medication_id = m.id
-            WHERE i.pharmacy_id = ? AND LOWER(TRIM(m.name)) = LOWER(TRIM(?))
-            """; // SQL-Abfrage für die Verfügbarkeit eines Medikaments.
-
-        List<Integer> results = executeQuery(query, // Führt die Abfrage aus.
-                resultSet -> resultSet.getInt("quantity"), // Holt die Menge des Medikaments.
-                pharmacyId, medicationName); // Setzt die Parameter für die Abfrage.
-
-        LOGGER.info("Checking availability for '" + medicationName + "' in pharmacy " + pharmacyId +
-                ": " + (!results.isEmpty() && results.get(0) > 0)); // Protokolliert die Verfügbarkeit.
-
-        return !results.isEmpty() && results.get(0) > 0; // Gibt true zurück, wenn das Medikament verfügbar ist.
+        return pharmacies;
     }
 
     public List<Medication> getInventoryByPharmacy(int pharmacyId) {
-        // Ruft das Inventar einer bestimmten Apotheke ab.
         String query = """
-            SELECT m.id, m.name, m.manufacturer, m.price, i.quantity, 
-                   m.category, m.prescription_required
-            FROM Inventory i
-            JOIN Medication m ON i.medication_id = m.id
-            WHERE i.pharmacy_id = ?
-            """; // SQL-Abfrage für das Inventar einer Apotheke.
+            SELECT * FROM m_medikamente WHERE m_a_id = ?
+            """;
+        return executeQuery(query, resultSet -> new Medication(
+                resultSet.getInt("m_id"),
+                resultSet.getString("m_name"),
+                resultSet.getString("m_hersteller"),
+                resultSet.getDouble("m_preis"),
+                resultSet.getInt("m_vorrat"),
+                resultSet.getString("m_kategorie"),
+                resultSet.getInt("m_rezeptpflichtig") == 1
+        ), pharmacyId);
+    }
 
-        return executeQuery(query, resultSet -> new Medication( // Führt die Abfrage aus und wandelt die Ergebnisse in Medication-Objekte um.
-                resultSet.getInt("id"), // ID des Medikaments.
-                resultSet.getString("name"), // Name des Medikaments.
-                resultSet.getString("manufacturer"), // Hersteller des Medikaments.
-                resultSet.getDouble("price"), // Preis des Medikaments.
-                resultSet.getInt("quantity"), // Menge des Medikaments.
-                resultSet.getString("category"), // Kategorie des Medikaments.
-                resultSet.getBoolean("prescription_required") // Gibt an, ob ein Rezept erforderlich ist.
-        ), pharmacyId); // Setzt die Apotheke-ID als Parameter.
+    public boolean isMedicationAvailableInPharmacy(int pharmacyId, String medicationName) {
+        String query = """
+            SELECT m_vorrat FROM m_medikamente
+            WHERE m_a_id = ? AND LOWER(TRIM(m_name)) = LOWER(TRIM(?))
+            """;
+
+        List<Integer> results = executeQuery(query,
+                resultSet -> resultSet.getInt("m_vorrat"),
+                pharmacyId, medicationName);
+
+        LOGGER.info("Checking availability for '" + medicationName + "' in pharmacy " + pharmacyId +
+                ": " + (!results.isEmpty() && results.get(0) > 0));
+
+        return !results.isEmpty() && results.get(0) > 0;
     }
 
     public void testConnection() {
-        // Testet die Verbindung zur Datenbank.
-        try (Connection connection = connect()) { // Stellt die Verbindung her.
-            if (connection != null) { // Überprüft, ob die Verbindung erfolgreich ist.
-                LOGGER.info("Datenbankverbindung erfolgreich!"); // Protokolliert den Erfolg.
+        try (Connection connection = connect()) {
+            if (connection != null) {
+                LOGGER.info("Datenbankverbindung erfolgreich!");
             }
-        } catch (SQLException e) { // Fängt SQL-Fehler ab.
-            LOGGER.log(Level.SEVERE, "Fehler bei der Datenbankverbindung:", e); // Protokolliert den Fehler.
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Fehler bei der Datenbankverbindung:", e);
         }
     }
 }

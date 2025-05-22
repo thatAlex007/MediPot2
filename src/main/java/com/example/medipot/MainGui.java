@@ -30,7 +30,7 @@ public class MainGui extends Application { // Hauptklasse, die die JavaFX-Anwend
         root.setStyle("-fx-background-color: #f7fbff;"); // Setzt die Hintergrundfarbe.
 
         // Logo und Titel oben
-        Image logoImage = new Image("file:C:/Users/enesy/OneDrive - HTL Spengergasse/Power - General/extra/Logo_Medipot_Power.png"); // Lädt das Logo.
+        Image logoImage = new Image("C:\\Users\\alexa\\Documents\\GitHub\\MediPot2\\src\\main\\java\\com\\example\\medipot\\Logo_Medipot_Power.png"); // Lädt das Logo.
         ImageView logoView = new ImageView(logoImage); // Erstellt ein ImageView für das Logo.
         logoView.setFitHeight(80); // Setzt die Höhe des Logos.
         logoView.setPreserveRatio(true); // Beibehaltung des Seitenverhältnisses.
