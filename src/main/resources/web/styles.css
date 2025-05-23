@@ -58,8 +58,9 @@ header h1 {
 .impressum-popup {
     display: none;
     position: fixed;
-    top: 20%;
-    right: 20%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
