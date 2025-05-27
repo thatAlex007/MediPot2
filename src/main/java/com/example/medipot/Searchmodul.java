@@ -18,7 +18,7 @@ public class Searchmodul { // Definiert die Klasse für die Suchfunktionalität.
         for (Pharmacy pharmacy : pharmacies) { // Iteriert über alle Apotheken.
             Medication medication = pharmacy.findMedication(medicationName);
             // Sucht das Medikament in der aktuellen Apotheke.
-            if (medication != null && medication.getStock() > 0) {
+            if (medication != null /*&& medication.getStock() > 0*/) {
                 // Überprüft, ob das Medikament existiert und auf Lager ist.
                 result.add(pharmacy); // Fügt die Apotheke der Ergebnisliste hinzu.
             }

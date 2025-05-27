@@ -21,6 +21,7 @@ public class DatabaseService {
 
             File dbFile = new File(System.getProperty("user.home") + "/.medipot/medipot.db");
 
+
             if (!dbFile.exists()) {
                 try (InputStream in = getClass().getResourceAsStream("/medipot.db")) {
                     if (in == null) throw new FileNotFoundException("Ressource 'medipot.db' nicht gefunden!");
@@ -36,6 +37,7 @@ public class DatabaseService {
             throw new RuntimeException(e);
         }
     }
+
 
     private Connection connect() throws SQLException {
         return DriverManager.getConnection(url);
@@ -68,7 +70,6 @@ public class DatabaseService {
                 resultSet.getString("m_name"),
                 resultSet.getString("m_hersteller"),
                 resultSet.getDouble("m_preis"),
-                resultSet.getInt("m_vorrat"),
                 resultSet.getString("m_kategorie"),
                 resultSet.getInt("m_rezeptpflichtig") == 1
         ));
@@ -91,36 +92,40 @@ public class DatabaseService {
         return pharmacies;
     }
 
-    public List<Medication> getInventoryByPharmacy(int pharmacyId) {
+    private List<Medication> getInventoryByPharmacy(int id) {
         String query = """
-            SELECT * FROM m_medikamente WHERE m_a_id = ?
-            """;
+        SELECT m_id, m_name, m_hersteller, m_preis, m_kategorie, m_rezeptpflichtig, i_vorrat
+        FROM i_inventare
+        INNER JOIN m_medikamente ON i_m_id = m_id
+        WHERE i_a_id = ?
+        """;
+
         return executeQuery(query, resultSet -> new Medication(
                 resultSet.getInt("m_id"),
                 resultSet.getString("m_name"),
                 resultSet.getString("m_hersteller"),
                 resultSet.getDouble("m_preis"),
-                resultSet.getInt("m_vorrat"),
                 resultSet.getString("m_kategorie"),
                 resultSet.getInt("m_rezeptpflichtig") == 1
-        ), pharmacyId);
+        ), id);
     }
+
 
     public boolean isMedicationAvailableInPharmacy(int pharmacyId, String medicationName) {
         String query = """
-            SELECT m_vorrat FROM m_medikamente
-            WHERE m_a_id = ? AND LOWER(TRIM(m_name)) = LOWER(TRIM(?))
-            """;
+        select i_vorrat
+        from i_inventare
+        inner join m_medikamente on i_m_id = m_id
+        where i_inventare.i_a_id = ? and lower(trim(m_medikamente.m_name)) = lower(trim(?))
+        """;
 
         List<Integer> results = executeQuery(query,
-                resultSet -> resultSet.getInt("m_vorrat"),
+                resultSet -> resultSet.getInt("i_vorrat"),
                 pharmacyId, medicationName);
-
-        LOGGER.info("Checking availability for '" + medicationName + "' in pharmacy " + pharmacyId +
-                ": " + (!results.isEmpty() && results.get(0) > 0));
 
         return !results.isEmpty() && results.get(0) > 0;
     }
+
 
     public void testConnection() {
         try (Connection connection = connect()) {

@@ -5,17 +5,15 @@ public class Medication { // Repräsentiert ein Medikament.
     private String name; // Name des Medikaments.
     private String manufacturer; // Hersteller des Medikaments.
     private double price; // Preis des Medikaments.
-    private int stock; // Lagerbestand des Medikaments.
     private String category; // Kategorie des Medikaments (z. B. Schmerzmittel, Antibiotika).
     private boolean prescriptionRequired; // Gibt an, ob das Medikament rezeptpflichtig ist.
 
-    public Medication(int id, String name, String manufacturer, double price, int stock, String category, boolean prescriptionRequired) {
+    public Medication(int id, String name, String manufacturer, double price, String category, boolean prescriptionRequired) {
         // Konstruktor, der die Attribute des Medikaments initialisiert.
         this.id = id; // Setzt die ID.
         this.name = name; // Setzt den Namen.
         this.manufacturer = manufacturer; // Setzt den Hersteller.
         this.price = price; // Setzt den Preis.
-        this.stock = stock; // Setzt den Lagerbestand.
         this.category = category; // Setzt die Kategorie.
         this.prescriptionRequired = prescriptionRequired; // Setzt die Rezeptpflicht.
     }
@@ -40,10 +38,6 @@ public class Medication { // Repräsentiert ein Medikament.
         return price;
     }
 
-    public int getStock() {
-        // Gibt den Lagerbestand des Medikaments zurück.
-        return stock;
-    }
 
     public String getCategory() {
         // Gibt die Kategorie des Medikaments zurück.
