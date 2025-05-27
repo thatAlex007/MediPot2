@@ -94,10 +94,10 @@ public class DatabaseService {
 
     private List<Medication> getInventoryByPharmacy(int id) {
         String query = """
-        SELECT m_id, m_name, m_hersteller, m_preis, m_kategorie, m_rezeptpflichtig, i_vorrat
-        FROM i_inventare
-        INNER JOIN m_medikamente ON i_m_id = m_id
-        WHERE i_a_id = ?
+        select m_id, m_name, m_hersteller, m_preis, m_kategorie, m_rezeptpflichtig, i_vorrat
+        from i_inventare
+        inner join on i_m_id = m_id
+        where i_a_id = ?
         """;
 
         return executeQuery(query, resultSet -> new Medication(
